@@ -1,0 +1,148 @@
+.rd-ticket-modal-overlay {
+  --navy: #1e2538;
+  --gold: #d9a441;
+  --gold-light: #f0c869;
+  --cream: #fcfbf8;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+
+  position: fixed;
+  inset: 0;
+  z-index: 10500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+
+  background: rgba(20, 24, 38, 0.65);
+  backdrop-filter: blur(4px);
+  font-family: "Manrope", -apple-system, BlinkMacSystemFont, sans-serif;
+  animation: rd-ticket-fade-in 520ms var(--ease-smooth) both;
+  will-change: opacity;
+}
+
+@keyframes rd-ticket-fade-in {
+  from { opacity: 0; backdrop-filter: blur(0px); }
+  to { opacity: 1; backdrop-filter: blur(4px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rd-ticket-modal-overlay { animation: none; }
+}
+
+.rd-ticket-modal {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  max-height: 88vh;
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--cream);
+  box-shadow: 0 24px 60px rgba(20, 24, 38, 0.45);
+  display: flex;
+  flex-direction: column;
+  animation: rd-ticket-smooth-in 620ms var(--ease-smooth) both;
+  will-change: transform, opacity;
+}
+
+@keyframes rd-ticket-smooth-in {
+  from { opacity: 0; transform: scale(0.92) translateY(14px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rd-ticket-modal { animation: none; }
+}
+
+@media (min-width: 640px) {
+  .rd-ticket-modal { max-width: 700px; }
+  .rd-ticket-modal-img { max-height: 76vh; }
+}
+
+.rd-ticket-modal-visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.rd-ticket-modal-close {
+  position: absolute;
+  top: 12px; right: 12px;
+  z-index: 2;
+  width: 34px; height: 34px;
+  display: flex; align-items: center; justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(20, 24, 38, 0.55);
+  color: #fff;
+  cursor: pointer;
+  transition: background 200ms var(--ease), transform 200ms var(--ease);
+}
+
+.rd-ticket-modal-close:hover,
+.rd-ticket-modal-close:focus-visible {
+  background: rgba(20, 24, 38, 0.8);
+  transform: scale(1.05);
+}
+
+/* Poster image — uses <picture> so only one file downloads */
+.rd-ticket-modal picture {
+  display: block;
+  width: 100%;
+}
+
+.rd-ticket-modal-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 68vh;
+  object-fit: cover;
+}
+
+.rd-ticket-modal-img--mobile { display: block; }
+.rd-ticket-modal-img--desktop { display: none; }
+
+@media (min-width: 640px) {
+  .rd-ticket-modal-img--mobile { display: none; }
+  .rd-ticket-modal-img--desktop { display: block; }
+}
+
+/* Reserve text — replaces previous CTA button */
+.rd-ticket-modal-reserve {
+  margin: 16px;
+  text-align: center;
+  font-family: "Manrope", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--navy);
+  letter-spacing: 0.01em;
+}
+
+.rd-ticket-modal-reserve-link {
+  color: var(--navy);
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--gold);
+  text-decoration-thickness: 2px;
+  transition: color 200ms var(--ease), text-decoration-color 200ms var(--ease);
+}
+
+.rd-ticket-modal-reserve-link:hover,
+.rd-ticket-modal-reserve-link:focus-visible {
+  color: var(--gold);
+  text-decoration-color: var(--navy);
+  outline: none;
+}
+
+@media (max-width: 380px) {
+  .rd-ticket-modal-reserve {
+    font-size: 13px;
+    margin: 14px;
+  }
+}

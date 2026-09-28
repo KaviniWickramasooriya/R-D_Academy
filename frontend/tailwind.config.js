@@ -1,0 +1,29 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+        serif: ['Playfair Display', 'serif'],
+        mono: ['Space Mono', 'monospace'],
+      },
+      colors: {
+        amber: {
+          300: '#fcd34d',
+          400: '#EFA634', // Brand Gold
+          500: '#d97706',
+        },
+        slate: {
+          800: '#1e293b',
+          900: '#0f172a',
+          950: '#15171E', // Studio Dark Background
+        }
+      }
+    },
+  },
+  plugins: [],
+}

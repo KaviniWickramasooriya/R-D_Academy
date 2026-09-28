@@ -1,0 +1,33 @@
+/* Admin Specific Custom Properties */
+:root {
+  --admin-bg: #020617; /* Matches Tailwind slate-950 */
+  --admin-surface: #0f172a; /* Matches Tailwind slate-900 */
+  --admin-border: #1e293b; /* Matches Tailwind slate-800 */
+  --admin-primary: #EFA634; /* Brand Gold */
+  --admin-text-main: #f8fafc;
+  --admin-text-muted: #94a3b8;
+}
+
+/* Admin Scrollbar (Thinner than public site) */
+.admin-scrollbar::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+.admin-scrollbar::-webkit-scrollbar-track {
+  background: var(--admin-bg);
+}
+.admin-scrollbar::-webkit-scrollbar-thumb {
+  background-color: var(--admin-border);
+  border-radius: 4px;
+}
+
+/* Interactive elements */
+.admin-row-hover:hover {
+  background-color: rgba(30, 41, 59, 0.4);
+}
+
+.admin-input-focus:focus {
+  border-color: var(--admin-primary);
+  box-shadow: 0 0 0 1px var(--admin-primary);
+  outline: none;
+}
