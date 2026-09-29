@@ -5,10 +5,14 @@ require("dotenv").config();
 const { submitApplication } = require("./controllers/applicationController");
 const { login } = require("./controllers/authController");
 const adminRoutes = require("./routes/adminRoutes");
+const classesWebhookRoutes = require("./routes/classesWebhookRoutes");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+
+app.use("/api/classes", classesWebhookRoutes);
 
 // Public Routes
 app.post("/api/applications", submitApplication);

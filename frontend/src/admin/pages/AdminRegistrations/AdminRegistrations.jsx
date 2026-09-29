@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getApplications, updateApplicationStatus } from '../../services/adminApi';
-import { Search, Check, X, ShieldAlert, Calendar, RotateCcw, Plus, Clock, CheckCircle2, XCircle } from 'lucide-react';
+import { Search, Check, X, Calendar, RotateCcw, Plus, Clock, CheckCircle2, XCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import AdminRegistrationModal from '../../components/AdminRegistrationModal/AdminRegistrationModal';
 
@@ -15,7 +15,6 @@ export default function AdminRegistrations() {
     setLoading(true);
     try {
       const data = await getApplications(filters);
-      // Sort applications so past/older applications appear first (ascending submission order)
       const rawApps = data.data || data;
       const sortedApps = [...rawApps].sort((a, b) => new Date(a.submitted_at) - new Date(b.submitted_at));
       setApplications(sortedApps); 
@@ -60,7 +59,15 @@ export default function AdminRegistrations() {
     );
   };
 
-  // Group applications into separate categories
+  const getPaymentBadge = (payStatus) => {
+    const isPaid = payStatus === 'Paid';
+    return (
+      <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-medium border uppercase tracking-wider ${isPaid ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' : 'bg-stone-500/10 border-stone-500/30 text-stone-400'}`}>
+        {payStatus || 'Not Paid'}
+      </span>
+    );
+  };
+
   const activeApps = applications.filter(app => app.status === 'Pending' || app.status === 'Under Review');
   const approvedApps = applications.filter(app => app.status === 'Approved');
   const rejectedApps = applications.filter(app => app.status === 'Rejected');
@@ -69,7 +76,7 @@ export default function AdminRegistrations() {
     if (appList.length === 0) {
       return (
         <tr>
-          <td colSpan="7" className="p-10 text-center text-stone-500 italic text-xs">No records found in this category.</td>
+          <td colSpan="8" className="p-10 text-center text-stone-500 italic text-xs">No records found in this category.</td>
         </tr>
       );
     }
@@ -94,6 +101,7 @@ export default function AdminRegistrations() {
           {new Date(app.submitted_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
         </td>
         <td className="p-4">{getStatusBadge(app.status)}</td>
+        <td className="p-4">{getPaymentBadge(app.payment_status)}</td>
         <td className="p-4 text-right" onClick={(e) => e.stopPropagation()}>
           <div className="flex items-center justify-end gap-1.5">
             {app.status !== 'Under Review' && (
@@ -197,9 +205,9 @@ export default function AdminRegistrations() {
       ) : (
         <div className="space-y-12">
           
-          {/* Table 1: Active / Pending & Under Review Applications */}
+          {/* Table 1: Active Applications */}
           <div className="bg-[#121212] border border-stone-800 rounded-xl overflow-hidden shadow-2xl">
-            <div className="bg-[#0a0a0a] px-6 py-4 border-b border-stone-800 flex items-center justify-between">
+            <div className="bg-[#0a0a0a] px-6 py-4 border-b border-stone-800">
               <h2 className="text-sm font-serif text-stone-100 flex items-center gap-2">
                 <Clock size={16} className="text-amber-400" /> Active & Reviewing Applications ({activeApps.length})
               </h2>
@@ -214,6 +222,7 @@ export default function AdminRegistrations() {
                     <th className="p-4 font-medium">Age</th>
                     <th className="p-4 font-medium">Submitted</th>
                     <th className="p-4 font-medium">Status</th>
+                    <th className="p-4 font-medium">Payment</th>
                     <th className="p-4 font-medium text-right">Actions</th>
                   </tr>
                 </thead>
@@ -224,9 +233,9 @@ export default function AdminRegistrations() {
             </div>
           </div>
 
-          {/* Table 2: Approved Applications Table */}
+          {/* Table 2: Approved Applications */}
           <div className="bg-[#121212] border border-stone-800 rounded-xl overflow-hidden shadow-2xl">
-            <div className="bg-[#0a0a0a] px-6 py-4 border-b border-stone-800 flex items-center justify-between">
+            <div className="bg-[#0a0a0a] px-6 py-4 border-b border-stone-800">
               <h2 className="text-sm font-serif text-stone-100 flex items-center gap-2">
                 <CheckCircle2 size={16} className="text-emerald-400" /> Approved Applications ({approvedApps.length})
               </h2>
@@ -241,6 +250,7 @@ export default function AdminRegistrations() {
                     <th className="p-4 font-medium">Age</th>
                     <th className="p-4 font-medium">Submitted</th>
                     <th className="p-4 font-medium">Status</th>
+                    <th className="p-4 font-medium">Payment</th>
                     <th className="p-4 font-medium text-right">Actions</th>
                   </tr>
                 </thead>
@@ -251,9 +261,9 @@ export default function AdminRegistrations() {
             </div>
           </div>
 
-          {/* Table 3: Declined / Rejected Applications Table */}
+          {/* Table 3: Rejected Applications */}
           <div className="bg-[#121212] border border-stone-800 rounded-xl overflow-hidden shadow-2xl">
-            <div className="bg-[#0a0a0a] px-6 py-4 border-b border-stone-800 flex items-center justify-between">
+            <div className="bg-[#0a0a0a] px-6 py-4 border-b border-stone-800">
               <h2 className="text-sm font-serif text-stone-100 flex items-center gap-2">
                 <XCircle size={16} className="text-rose-400" /> Declined / Rejected Applications ({rejectedApps.length})
               </h2>
@@ -268,6 +278,7 @@ export default function AdminRegistrations() {
                     <th className="p-4 font-medium">Age</th>
                     <th className="p-4 font-medium">Submitted</th>
                     <th className="p-4 font-medium">Status</th>
+                    <th className="p-4 font-medium">Payment</th>
                     <th className="p-4 font-medium text-right">Actions</th>
                   </tr>
                 </thead>
@@ -281,7 +292,6 @@ export default function AdminRegistrations() {
         </div>
       )}
 
-      {/* Registration Modal */}
       <AdminRegistrationModal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 

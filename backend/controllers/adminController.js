@@ -1,5 +1,6 @@
 const db = require("../db");
 const { sendStatusUpdateEmail } = require("../utils/emailService");
+const { syncApplicationToSheet } = require("../utils/sheetSync");
 
 exports.getApplications = async (req, res) => {
   try {
@@ -63,30 +64,52 @@ exports.getApplicationDetails = async (req, res) => {
 exports.updateStatus = async (req, res) => {
   try {
     const { id } = req.params;
-    const { status, reason } = req.body;
+    const { status, reason, batch_id } = req.body;
 
-    const appQuery = await db.query("SELECT email, first_name FROM applications WHERE id = $1", [id]);
+    const appQuery = await db.query("SELECT * FROM applications WHERE id = $1", [id]);
     if (appQuery.rows.length === 0) {
       return res.status(404).json({ message: "Application not found." });
     }
     const applicant = appQuery.rows[0];
 
-    // Update status
+    let accessCode = applicant.access_code;
+    let paymentStatus = applicant.payment_status;
+
+    // If approved, automatically set payment status to Paid and generate access code
+    if (status === "Approved") {
+      paymentStatus = "Paid";
+      if (!accessCode) {
+        const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+        accessCode = '';
+        for (let i = 0; i < 8; i++) {
+          accessCode += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+      }
+    }
+
+    // Update PostgreSQL for ALL statuses (Pending, Under Review, Approved, Rejected)
     await db.query(
-      "UPDATE applications SET status = $1, rejection_reason = $2 WHERE id = $3", 
-      [status, reason || null, id]
+      `UPDATE applications 
+       SET status = $1, rejection_reason = $2, payment_status = $3, batch_id = COALESCE($4, batch_id), access_code = $5 
+       WHERE id = $6`, 
+      [status, reason || null, paymentStatus, batch_id || null, accessCode || null, id]
     );
 
-    // Record status history entry
     await db.query(
       "INSERT INTO application_history (application_id, to_status, reason) VALUES ($1, $2, $3)",
       [id, status, reason || null]
     );
 
-    // Send email notification
-    sendStatusUpdateEmail(applicant.email, applicant.first_name, status, reason);
+    const updatedRes = await db.query("SELECT * FROM applications WHERE id = $1", [id]);
+    const updatedApp = updatedRes.rows[0];
+    
+    // Push sync to Google Sheet immediately for ANY status change
+    syncApplicationToSheet(updatedApp);
 
-    res.json({ message: `Application status updated to ${status}.` });
+    // Send email notification (with access code if approved)
+    sendStatusUpdateEmail(applicant.email, applicant.first_name, status, reason, accessCode);
+
+    res.json({ message: `Application status updated to ${status}.`, access_code: accessCode });
   } catch (error) {
     console.error("Update status error:", error);
     res.status(500).json({ message: "Failed to update status." });

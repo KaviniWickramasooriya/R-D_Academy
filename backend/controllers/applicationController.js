@@ -1,4 +1,5 @@
 const db = require("../db");
+const { syncApplicationToSheet } = require("../utils/sheetSync");
 
 const generateAppRef = async () => {
   const year = new Date().getFullYear();
@@ -30,7 +31,7 @@ exports.submitApplication = async (req, res) => {
       ) VALUES (
         $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, 
         $17, $18, $19, $20, $21, $22, $23
-      ) RETURNING application_ref`;
+      ) RETURNING *`;
 
     const values = [
       application_ref, data.academy_category, data.course_name, data.first_name, data.last_name,
@@ -41,13 +42,17 @@ exports.submitApplication = async (req, res) => {
     ];
 
     const result = await db.query(query, values);
+    const newApp = result.rows[0];
+
+    // Instantly sync the new application to Google Sheets
+    syncApplicationToSheet(newApp);
     
     res.status(201).json({ 
       message: "Your application has been submitted successfully.", 
-      application_ref: result.rows[0].application_ref 
+      application_ref: newApp.application_ref 
     });
   } catch (error) {
-    console.error(error);
+    console.error("Submit application error:", error);
     res.status(500).json({ message: "Failed to submit application." });
   }
 };

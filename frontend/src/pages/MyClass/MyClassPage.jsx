@@ -1,122 +1,152 @@
 import { useState } from 'react';
+import { getAccess } from '../../services/classesApi';
+import { SessionList } from '../../components/ScheduleSection/ScheduleSection';
 import { motion } from 'framer-motion';
-import { PlayCircle, Video, Calendar, KeyRound, AlertCircle } from 'lucide-react';
-import { getClassAccess } from '../../services/registrationApi';
-import "./MyClassPage.css";
+import { KeyRound, Video, AlertCircle, PlaySquare } from 'lucide-react';
 
 export default function MyClassPage() {
   const [code, setCode] = useState('');
-  const [classData, setClassData] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState(null);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleOpenClass = async (e) => {
+  async function open(e) {
     e.preventDefault();
+    if (!code.trim()) return;
     setLoading(true);
     setError('');
     
     try {
-      // Backend validates code and returns Zoom details only for paid/approved students[cite: 22]
-      const data = await getClassAccess(code);
-      setClassData(data);
+      const res = await getAccess(code.trim().toUpperCase());
+      if (!res.ok) throw new Error(res.error || 'Could not verify code');
+      setData(res);
     } catch (err) {
-      setError(err.response?.data?.error || 'Invalid or inactive access code.');
-      setClassData(null);
+      setData(null);
+      setError(err.message || 'Could not open your class. Please check your access code.');
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   return (
-    <div className="min-h-screen my-class-bg py-32 px-4">
-      <div className="max-w-3xl mx-auto">
-        <div className="text-center mb-12">
-          <div className="w-16 h-16 bg-amber-100 text-amber-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
-            <KeyRound size={28} />
-          </div>
-          <h1 className="text-4xl md:text-5xl font-serif text-slate-900 mb-4">Student Access Portal</h1>
-          <p className="text-slate-500 max-w-lg mx-auto leading-relaxed">
-            Enter your personal access code to retrieve your live Zoom link, upcoming schedule, and recent class recordings[cite: 22].
+    <div className="min-h-screen bg-[#0a0a0a] text-stone-200 pt-16 pb-32 selection:bg-[#d4af37] selection:text-stone-900">
+      <div className="max-w-[1000px] mx-auto px-6">
+        
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center max-w-xl mx-auto mb-16"
+        >
+          <span className="text-[10px] uppercase tracking-[0.3em] text-[#d4af37] block mb-3 font-mono">Student Portal</span>
+          <h1 className="text-5xl font-serif text-stone-100 mb-4">My Class Access</h1>
+          <p className="text-stone-400 text-xs font-light leading-relaxed">
+            Enter your secure 8-character access code provided by the administration desk upon payment confirmation to unlock your Zoom link and materials.
           </p>
-        </div>
+        </motion.div>
 
-        <form onSubmit={handleOpenClass} className="bg-white p-8 rounded-2xl shadow-xl shadow-slate-200/40 border border-slate-100 mb-8 max-w-xl mx-auto relative z-10">
-          <label className="block text-sm font-bold uppercase tracking-wider text-slate-700 mb-3">Access Code</label>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <input 
-              type="text" 
-              value={code} 
-              onChange={(e) => setCode(e.target.value.toUpperCase())} 
-              placeholder="e.g. K7M2Q9XA" 
-              className="flex-1 border-2 border-slate-200 rounded-xl px-4 py-4 focus:outline-none focus:border-amber-400 uppercase tracking-[0.3em] font-mono text-lg transition-colors"
-              required
-            />
-            <button 
-              type="submit" 
-              disabled={loading || code.length < 6}
-              className="px-10 py-4 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 disabled:opacity-50 transition-colors shadow-lg"
-            >
-              {loading ? 'Verifying...' : 'Access'}
-            </button>
+        {/* Access Code Form */}
+        <motion.form 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          onSubmit={open} 
+          className="bg-[#121212] border border-stone-800 p-8 rounded-xl max-w-lg mx-auto shadow-2xl space-y-6 mb-16"
+        >
+          <div>
+            <label className="text-[10px] uppercase tracking-[0.2em] text-stone-400 block mb-2 font-mono">Your Access Code</label>
+            <div className="relative flex items-center">
+              <KeyRound className="absolute left-4 text-stone-500" size={18} />
+              <input 
+                type="text"
+                value={code} 
+                onChange={(e) => setCode(e.target.value)} 
+                placeholder="e.g. K7M2Q9XA" 
+                required
+                className="w-full bg-[#0a0a0a] border border-stone-800 text-stone-100 pl-12 pr-4 py-3.5 text-sm uppercase font-mono tracking-wider focus:outline-none focus:border-[#d4af37]"
+              />
+            </div>
           </div>
+
           {error && (
-            <div className="flex items-center gap-2 mt-4 text-rose-500 text-sm font-medium bg-rose-50 p-3 rounded-lg border border-rose-100">
-              <AlertCircle size={16} /> {error}
+            <div className="p-3 bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs flex items-center gap-2 rounded">
+              <AlertCircle size={14} /> {error}
             </div>
           )}
-        </form>
 
-        {classData && (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100 mt-12">
-            <div className="p-8 border-b border-slate-100 bg-slate-950 text-white relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl"></div>
-              <h2 className="text-3xl font-serif mb-2 relative z-10">Welcome, {classData.studentName}</h2>
-              <p className="text-amber-400 font-medium relative z-10">{classData.className} — {classData.batchName}</p>
-            </div>
+          <button 
+            type="submit" 
+            disabled={loading} 
+            className="w-full py-4 bg-[#d4af37] text-stone-950 font-medium text-[10px] uppercase tracking-[0.2em] hover:bg-[#ebd083] transition shadow-lg disabled:opacity-50"
+          >
+            {loading ? 'Verifying Code...' : 'Open My Class'}
+          </button>
+        </motion.form>
+
+        {/* Unlocked Class Content */}
+        {data && (
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="space-y-12 bg-[#121212] border border-[#d4af37]/30 p-8 md:p-12 rounded-2xl shadow-2xl relative overflow-hidden"
+          >
+            <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#d4af37] to-transparent" />
             
-            <div className="p-8 md:p-10">
-              <div className="bg-sky-50 rounded-2xl p-8 mb-10 text-center border border-sky-100 shadow-inner">
-                <a href={classData.zoomLink} target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 bg-sky-600 text-white px-10 py-5 rounded-xl font-bold text-lg hover:bg-sky-700 transition-colors w-full md:w-auto justify-center mb-6 shadow-lg shadow-sky-600/30 hover:-translate-y-1 transform duration-200">
-                  <Video size={24} /> Join Live Zoom Session
-                </a>
-                <p className="text-sky-900 text-lg">Meeting Passcode: <strong className="passcode-box font-mono bg-white px-4 py-2 rounded-lg shadow-sm border border-sky-200 ml-2">{classData.passcode}</strong></p>
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-stone-800 pb-8">
+              <div>
+                <span className="text-[10px] uppercase tracking-[0.3em] text-[#d4af37] block mb-1 font-mono">Enrolled Student</span>
+                <h2 className="text-3xl font-serif text-stone-100">Welcome, {data.studentName}</h2>
+                <p className="text-xs text-stone-400 mt-1">{data.className} · <strong className="text-stone-200">{data.batchName}</strong></p>
               </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                <div>
-                  <h3 className="flex items-center gap-2 text-xl font-serif border-b pb-4 mb-6"><Calendar size={20} className="text-amber-500" /> Upcoming Schedule</h3>
-                  <ul className="space-y-4">
-                    {classData.sessions?.length > 0 ? classData.sessions.map((session, idx) => (
-                      <li key={idx} className="bg-slate-50 p-5 rounded-xl border border-slate-100">
-                        <p className="font-bold text-slate-900">{new Date(session.session_date).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })}</p>
-                        <p className="text-sm text-slate-600 mt-1">{session.session_time} • {session.topic}</p>
-                      </li>
-                    )) : <p className="text-slate-500 italic">No upcoming sessions scheduled.</p>}
-                  </ul>
-                </div>
-
-                <div>
-                  <h3 className="flex items-center gap-2 text-xl font-serif border-b pb-4 mb-6"><PlayCircle size={20} className="text-amber-500" /> Class Recordings</h3>
-                  <ul className="space-y-4">
-                    {classData.recordings?.length > 0 ? classData.recordings.map((rec, idx) => (
-                      <li key={idx}>
-                        <a href={rec.link} target="_blank" rel="noreferrer" className="flex items-center gap-4 text-slate-700 hover:text-slate-900 transition-colors p-4 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-200">
-                          <div className="w-10 h-10 rounded-full bg-rose-100 text-rose-500 flex items-center justify-center shrink-0">
-                            <PlayCircle size={20} />
-                          </div>
-                          <div>
-                            <p className="font-bold">{rec.title}</p>
-                            <p className="text-xs text-slate-500 mt-1 uppercase tracking-wider font-semibold">{new Date(rec.session_date).toLocaleDateString()}</p>
-                          </div>
-                        </a>
-                      </li>
-                    )) : <p className="text-slate-500 italic">Recordings will appear here after class.</p>}
-                  </ul>
-                </div>
-              </div>
+              <a 
+                href={data.zoomLink} 
+                target="_blank" 
+                rel="noreferrer"
+                className="px-6 py-3.5 bg-emerald-500 text-stone-950 font-medium text-[10px] uppercase tracking-[0.2em] hover:bg-emerald-400 transition flex items-center gap-2 shadow-lg rounded-lg"
+              >
+                <Video size={16} /> Join Zoom Class
+              </a>
             </div>
+
+            <div className="bg-[#0a0a0a] border border-stone-800 p-6 rounded-xl flex items-center justify-between">
+              <div>
+                <span className="text-[10px] uppercase tracking-widest text-stone-500 block mb-1">Meeting Passcode</span>
+                <span className="text-xl font-mono text-[#d4af37] tracking-widest font-bold">{data.passcode}</span>
+              </div>
+              <span className="text-xs text-stone-400 italic">Please enter passcode when prompted by Zoom.</span>
+            </div>
+
+            {/* Upcoming Batch Sessions */}
+            <div>
+              <h3 className="text-xl font-serif text-stone-100 mb-6">Upcoming Batch Sessions</h3>
+              <SessionList sessions={data.sessions} />
+            </div>
+
+            {/* Recordings Archive */}
+            {data.recordings && data.recordings.length > 0 && (
+              <div className="pt-8 border-t border-stone-800">
+                <h3 className="text-xl font-serif text-stone-100 mb-6 flex items-center gap-2">
+                  <PlaySquare size={20} className="text-[#d4af37]" /> Class Recordings Archive
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {data.recordings.map((r, idx) => (
+                    <a 
+                      key={idx} 
+                      href={r.link} 
+                      target="_blank" 
+                      rel="noreferrer"
+                      className="p-5 bg-[#0a0a0a] border border-stone-800 rounded-xl hover:border-[#d4af37]/50 transition block group"
+                    >
+                      <span className="text-[10px] font-mono text-[#d4af37] block mb-1">{r.date}</span>
+                      <h4 className="text-sm font-medium text-stone-200 group-hover:text-[#d4af37] transition">{r.title}</h4>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
+
           </motion.div>
         )}
+
       </div>
     </div>
   );
