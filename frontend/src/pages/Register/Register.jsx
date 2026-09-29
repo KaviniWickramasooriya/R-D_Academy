@@ -4,21 +4,34 @@ import { ArrowLeft, Check, AlertCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-const COURSES = [
-  { category: "Drawing Academy & Studio", name: "Beginner Drawing" },
-  { category: "Drawing Academy & Studio", name: "Graphite - Portrait & Live Drawing" },
-  { category: "Drawing Academy & Studio", name: "Charcoal" },
-  { category: "Drawing Academy & Studio", name: "General Painting Course" },
-  { category: "Drawing Academy & Studio", name: "Advanced Painting" },
-  { category: "Drawing Academy & Studio", name: "Pre-Beginner Art" },
-  { category: "Drawing Academy & Studio", name: "Kids Drawing Course" },
-  { category: "Rising Voices Academy", name: "Adult Vocal Program" },
-  { category: "Rising Voices Academy", name: "Kids Vocal Program" },
-  { category: "Therapeutic & Creative Activities", name: "Yoga Classes" }
+const CATEGORIES = [
+  "Drawing Academy & Studio",
+  "Rising Voices Academy",
+  "Therapeutic & Creative Activities"
 ];
+
+const COURSES_BY_CATEGORY = {
+  "Drawing Academy & Studio": [
+    "Beginner Drawing",
+    "Graphite - Portrait & Live Drawing",
+    "Charcoal",
+    "General Painting Course",
+    "Advanced Painting",
+    "Pre-Beginner Art",
+    "Kids Drawing Course"
+  ],
+  "Rising Voices Academy": [
+    "Adult Vocal Program",
+    "Kids Vocal Program"
+  ],
+  "Therapeutic & Creative Activities": [
+    "Yoga Classes"
+  ]
+};
 
 export default function Register() {
   const [formData, setFormData] = useState({
+    academyCategory: "Drawing Academy & Studio",
     courseName: "Advanced Painting",
     firstName: "",
     lastName: "",
@@ -76,7 +89,18 @@ export default function Register() {
   const currentStep = steps[currentStepIndex] || steps[0];
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    if (name === "academyCategory") {
+      // Reset courseName to the first available course in the new category
+      const availableCourses = COURSES_BY_CATEGORY[value] || [];
+      setFormData({
+        ...formData,
+        academyCategory: value,
+        courseName: availableCourses[0] || ""
+      });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleNext = (e) => {
@@ -99,13 +123,10 @@ export default function Register() {
     setIsSubmitting(true);
     setError("");
 
-    const selectedCourseObj = COURSES.find(c => c.name === formData.courseName);
-    const academyCategory = selectedCourseObj ? selectedCourseObj.category : "Drawing Academy & Studio";
-
     try {
       const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
       const response = await axios.post(`${apiUrl}/applications`, {
-        academy_category: academyCategory,
+        academy_category: formData.academyCategory,
         course_name: formData.courseName,
         first_name: formData.firstName,
         last_name: formData.lastName,
@@ -193,6 +214,25 @@ export default function Register() {
                   <motion.div key="course" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-6">
                     <div>
                       <label className="text-[11px] uppercase tracking-[0.15em] text-stone-400 block mb-3">
+                        Academy Category *
+                      </label>
+                      <select
+                        name="academyCategory"
+                        value={formData.academyCategory}
+                        onChange={handleChange}
+                        required
+                        className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3.5 text-sm focus:outline-none focus:border-[#d4af37] transition-colors mb-6"
+                      >
+                        {CATEGORIES.map((cat) => (
+                          <option key={cat} value={cat} className="bg-[#121212]">
+                            {cat}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="text-[11px] uppercase tracking-[0.15em] text-stone-400 block mb-3">
                         Course *
                       </label>
                       <select
@@ -202,9 +242,9 @@ export default function Register() {
                         required
                         className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3.5 text-sm focus:outline-none focus:border-[#d4af37] transition-colors"
                       >
-                        {COURSES.map((c) => (
-                          <option key={c.name} value={c.name} className="bg-[#121212]">
-                            {c.name}
+                        {(COURSES_BY_CATEGORY[formData.academyCategory] || []).map((cName) => (
+                          <option key={cName} value={cName} className="bg-[#121212]">
+                            {cName}
                           </option>
                         ))}
                       </select>
@@ -249,7 +289,7 @@ export default function Register() {
                           value={formData.dob}
                           onChange={handleChange}
                           required
-                          className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3 text-sm focus:outline-none focus:border-[#d4af37]"
+                          className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3 text-sm focus:outline-none focus:border-[#d4af37] [color-scheme:dark]"
                         />
                         {age !== null && (
                           <span className={`text-[11px] block mt-1.5 ${requiresGuardian ? "text-[#d4af37]" : "text-stone-500"}`}>
@@ -480,6 +520,10 @@ export default function Register() {
                   <motion.div key="review" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-4">
                     <div className="border-t border-stone-800/80 divide-y divide-stone-800/60">
                       <div className="py-4 grid grid-cols-1 md:grid-cols-3">
+                        <dt className="text-xs text-stone-400">Academy Category</dt>
+                        <dd className="md:col-span-2 text-xs text-stone-200 font-medium">{formData.academyCategory}</dd>
+                      </div>
+                      <div className="py-4 grid grid-cols-1 md:grid-cols-3">
                         <dt className="text-xs text-stone-400">Course</dt>
                         <dd className="md:col-span-2 text-xs text-stone-200 font-medium">{formData.courseName}</dd>
                       </div>
@@ -537,14 +581,14 @@ export default function Register() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="px-8 py-3 bg-[#be9c58] hover:bg-[#caa763] text-stone-950 text-xs tracking-wider font-medium transition-colors disabled:opacity-50"
+                    className="px-8 py-3 bg-[#d4af37] hover:bg-[#ebd083] text-stone-950 text-xs tracking-wider font-medium transition-colors disabled:opacity-50"
                   >
                     {isSubmitting ? "Submitting..." : "Submit application"}
                   </button>
                 ) : (
                   <button
                     type="submit"
-                    className="px-8 py-3 bg-[#be9c58] hover:bg-[#caa763] text-stone-950 text-xs tracking-wider font-medium transition-colors"
+                    className="px-8 py-3 bg-[#d4af37] hover:bg-[#ebd083] text-stone-950 text-xs tracking-wider font-medium transition-colors"
                   >
                     Continue
                   </button>

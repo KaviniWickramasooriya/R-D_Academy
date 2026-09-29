@@ -2,21 +2,34 @@ import { useState, useEffect } from "react";
 import { X, AlertCircle } from "lucide-react";
 import axios from "axios";
 
-const COURSES = [
-  { category: "Drawing Academy & Studio", name: "Beginner Drawing" },
-  { category: "Drawing Academy & Studio", name: "Graphite - Portrait & Live Drawing" },
-  { category: "Drawing Academy & Studio", name: "Charcoal" },
-  { category: "Drawing Academy & Studio", name: "General Painting Course" },
-  { category: "Drawing Academy & Studio", name: "Advanced Painting" },
-  { category: "Drawing Academy & Studio", name: "Pre-Beginner Art" },
-  { category: "Drawing Academy & Studio", name: "Kids Drawing Course" },
-  { category: "Rising Voices Academy", name: "Adult Vocal Program" },
-  { category: "Rising Voices Academy", name: "Kids Vocal Program" },
-  { category: "Therapeutic & Creative Activities", name: "Yoga Classes" }
+const CATEGORIES = [
+  "Drawing Academy & Studio",
+  "Rising Voices Academy",
+  "Therapeutic & Creative Activities"
 ];
+
+const COURSES_BY_CATEGORY = {
+  "Drawing Academy & Studio": [
+    "Beginner Drawing",
+    "Graphite - Portrait & Live Drawing",
+    "Charcoal",
+    "General Painting Course",
+    "Advanced Painting",
+    "Pre-Beginner Art",
+    "Kids Drawing Course"
+  ],
+  "Rising Voices Academy": [
+    "Adult Vocal Program",
+    "Kids Vocal Program"
+  ],
+  "Therapeutic & Creative Activities": [
+    "Yoga Classes"
+  ]
+};
 
 export default function AdminRegistrationModal({ isOpen, onClose, onSuccess }) {
   const [formData, setFormData] = useState({
+    academyCategory: "Drawing Academy & Studio",
     courseName: "Beginner Drawing",
     firstName: "",
     lastName: "",
@@ -63,7 +76,17 @@ export default function AdminRegistrationModal({ isOpen, onClose, onSuccess }) {
   if (!isOpen) return null;
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    if (name === "academyCategory") {
+      const availableCourses = COURSES_BY_CATEGORY[value] || [];
+      setFormData({
+        ...formData,
+        academyCategory: value,
+        courseName: availableCourses[0] || ""
+      });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -71,15 +94,12 @@ export default function AdminRegistrationModal({ isOpen, onClose, onSuccess }) {
     setIsSubmitting(true);
     setError("");
 
-    const selectedCourseObj = COURSES.find(c => c.name === formData.courseName);
-    const academyCategory = selectedCourseObj ? selectedCourseObj.category : "Drawing Academy & Studio";
-
     try {
       const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
       const token = localStorage.getItem("adminToken");
 
       await axios.post(`${apiUrl}/applications`, {
-        academy_category: academyCategory,
+        academy_category: formData.academyCategory,
         course_name: formData.courseName,
         first_name: formData.firstName,
         last_name: formData.lastName,
@@ -132,6 +152,21 @@ export default function AdminRegistrationModal({ isOpen, onClose, onSuccess }) {
         <form onSubmit={handleSubmit} className="space-y-6 max-h-[70vh] overflow-y-auto pr-2">
           
           <div>
+            <label className="text-[10px] uppercase tracking-[0.2em] text-stone-400 block mb-2">Select Academy Category *</label>
+            <select
+              name="academyCategory"
+              value={formData.academyCategory}
+              onChange={handleChange}
+              required
+              className="w-full bg-[#0a0a0a] border border-stone-800 text-stone-200 p-3 text-xs focus:outline-none focus:border-[#d4af37]"
+            >
+              {CATEGORIES.map(cat => (
+                <option key={cat} value={cat}>{cat}</option>
+              ))}
+            </select>
+          </div>
+
+          <div>
             <label className="text-[10px] uppercase tracking-[0.2em] text-stone-400 block mb-2">Select Course *</label>
             <select
               name="courseName"
@@ -140,8 +175,8 @@ export default function AdminRegistrationModal({ isOpen, onClose, onSuccess }) {
               required
               className="w-full bg-[#0a0a0a] border border-stone-800 text-stone-200 p-3 text-xs focus:outline-none focus:border-[#d4af37]"
             >
-              {COURSES.map(c => (
-                <option key={c.name} value={c.name}>{c.name} ({c.category})</option>
+              {(COURSES_BY_CATEGORY[formData.academyCategory] || []).map(cName => (
+                <option key={cName} value={cName}>{cName}</option>
               ))}
             </select>
           </div>
@@ -160,7 +195,7 @@ export default function AdminRegistrationModal({ isOpen, onClose, onSuccess }) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="text-[10px] uppercase tracking-[0.2em] text-stone-400 block mb-2">Date of Birth *</label>
-              <input type="date" name="dob" value={formData.dob} onChange={handleChange} required className="w-full bg-[#0a0a0a] border border-stone-800 p-3 text-xs text-stone-200 focus:outline-none focus:border-[#d4af37]" />
+              <input type="date" name="dob" value={formData.dob} onChange={handleChange} required className="w-full bg-[#0a0a0a] border border-stone-800 p-3 text-xs text-stone-200 focus:outline-none focus:border-[#d4af37] [color-scheme:dark]" />
               {age !== null && <span className="text-[10px] text-[#d4af37] mt-1 block">Calculated Age: {age} yrs</span>}
             </div>
             <div>

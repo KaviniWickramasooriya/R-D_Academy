@@ -46,7 +46,7 @@ export default function AdminRegistrationDetails() {
   if (loading) return <div className="p-12 text-center text-stone-500">Loading application details...</div>;
   if (!data) return <div className="p-12 text-center text-rose-400">Application not found.</div>;
 
-  const { application, notes } = data;
+  const { application, notes, history = [] } = data;
 
   const getStatusBadge = (status) => {
     const styles = {
@@ -89,7 +89,6 @@ export default function AdminRegistrationDetails() {
         
         {/* Left Columns: Core Data */}
         <div className="lg:col-span-2 space-y-6">
-          
           <section className="bg-[#121212] border border-stone-800 rounded-xl p-8">
             <h2 className="flex items-center gap-2.5 text-lg font-serif text-stone-100 mb-6 border-b border-stone-800 pb-4">
               <User size={18} className="text-[#d4af37]" /> Personal Information
@@ -141,8 +140,27 @@ export default function AdminRegistrationDetails() {
           </section>
         </div>
 
-        {/* Right Column: Admin Notes & History */}
+        {/* Right Column: Status History & Admin Notes */}
         <div className="space-y-6">
+          <section className="bg-[#121212] border border-stone-800 rounded-xl p-8">
+            <h2 className="flex items-center gap-2 text-base font-serif text-stone-100 mb-4">
+              <Clock size={16} className="text-[#d4af37]" /> Status History
+            </h2>
+            <div className="space-y-3 mb-6 max-h-48 overflow-y-auto pr-2">
+              {history.length === 0 ? (
+                <p className="text-xs text-stone-500 italic">No status updates logged yet.</p>
+              ) : (
+                history.map((hist, i) => (
+                  <div key={i} className="bg-stone-900/80 p-3 rounded border border-stone-800 text-xs">
+                    <p className="font-medium text-stone-200">Status: {hist.to_status}</p>
+                    {hist.reason && <p className="text-[11px] text-rose-400 mt-1">Reason: {hist.reason}</p>}
+                    <p className="text-[10px] text-stone-500 mt-1 text-right">{new Date(hist.changed_at).toLocaleString()}</p>
+                  </div>
+                ))
+              )}
+            </div>
+          </section>
+
           <section className="bg-[#121212] border border-stone-800 rounded-xl p-8">
             <h2 className="flex items-center gap-2 text-base font-serif text-stone-100 mb-4">
               <FileEdit size={16} className="text-[#d4af37]" /> Admin Notes

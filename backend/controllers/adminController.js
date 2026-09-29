@@ -44,9 +44,15 @@ exports.getApplicationDetails = async (req, res) => {
       [id]
     );
 
+    const historyResult = await db.query(
+      "SELECT * FROM application_history WHERE application_id = $1 ORDER BY changed_at DESC",
+      [id]
+    );
+
     res.json({
       application: appResult.rows[0],
-      notes: notesResult.rows
+      notes: notesResult.rows,
+      history: historyResult.rows
     });
   } catch (error) {
     console.error("Get details error:", error);
@@ -59,23 +65,28 @@ exports.updateStatus = async (req, res) => {
     const { id } = req.params;
     const { status, reason } = req.body;
 
-    // 1. Fetch applicant's email and name before updating
     const appQuery = await db.query("SELECT email, first_name FROM applications WHERE id = $1", [id]);
     if (appQuery.rows.length === 0) {
       return res.status(404).json({ message: "Application not found." });
     }
     const applicant = appQuery.rows[0];
 
-    // 2. Update status in PostgreSQL database
+    // Update status
     await db.query(
       "UPDATE applications SET status = $1, rejection_reason = $2 WHERE id = $3", 
       [status, reason || null, id]
     );
 
-    // 3. Trigger email notification asynchronously
+    // Record status history entry
+    await db.query(
+      "INSERT INTO application_history (application_id, to_status, reason) VALUES ($1, $2, $3)",
+      [id, status, reason || null]
+    );
+
+    // Send email notification
     sendStatusUpdateEmail(applicant.email, applicant.first_name, status, reason);
 
-    res.json({ message: `Application status updated to ${status} and email dispatched.` });
+    res.json({ message: `Application status updated to ${status}.` });
   } catch (error) {
     console.error("Update status error:", error);
     res.status(500).json({ message: "Failed to update status." });

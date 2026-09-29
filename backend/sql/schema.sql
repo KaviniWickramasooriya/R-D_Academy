@@ -83,3 +83,11 @@ CREATE TABLE recordings (
   title VARCHAR(200) NOT NULL,
   link VARCHAR(255) NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS application_history (
+    id SERIAL PRIMARY KEY,
+    application_id INT REFERENCES applications(id) ON DELETE CASCADE,
+    to_status VARCHAR(50) NOT NULL,
+    reason TEXT,
+    changed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
