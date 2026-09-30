@@ -168,19 +168,18 @@ export default function Register() {
 
   return (
     <div className="bg-[#0a0a0a] text-stone-200 font-sans selection:bg-[#d4af37] selection:text-stone-900 min-h-screen flex flex-col">
-      {/* Reduced top padding: pt-6 on mobile, pt-8 on desktop to sit right below navbar */}
-      <div className="flex-1 max-w-[1100px] w-full mx-auto px-6 pt-6 md:pt-8 pb-16">
+      <div className="flex-1 max-w-[1100px] w-full mx-auto px-4 sm:px-6 pt-6 md:pt-10 pb-20">
         
         {isSubmitted ? (
-          <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="max-w-xl mx-auto py-8 text-center">
+          <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="max-w-xl mx-auto py-8 text-center px-4">
             <div className="w-16 h-16 bg-[#d4af37]/10 border border-[#d4af37]/40 rounded-full flex items-center justify-center mx-auto mb-6">
               <Check className="text-[#d4af37]" size={30} />
             </div>
             <h2 className="text-3xl font-serif text-stone-100 mb-3">Application Submitted</h2>
-            <p className="text-stone-400 text-xs leading-relaxed mb-6">
+            <p className="text-stone-400 text-xs sm:text-sm leading-relaxed mb-6">
               Your application has been received successfully. Please send your payment slip via WhatsApp to secure your batch placement.
             </p>
-            <div className="bg-[#141414] border border-stone-800 p-6 mb-6">
+            <div className="bg-[#141414] border border-stone-800 p-6 mb-6 rounded-xl">
               <span className="text-[10px] uppercase tracking-[0.25em] text-stone-500 block mb-2">Application Reference</span>
               <span className="text-2xl font-mono text-[#d4af37] tracking-widest">{refNumber}</span>
             </div>
@@ -190,7 +189,7 @@ export default function Register() {
                 href={`https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMessage}`} 
                 target="_blank" 
                 rel="noreferrer"
-                className="px-6 py-3.5 bg-[#25D366] text-stone-950 font-medium text-xs uppercase tracking-widest hover:bg-[#20ba5a] transition flex items-center justify-center gap-2 rounded shadow-lg"
+                className="w-full sm:w-auto px-6 py-4 bg-[#25D366] text-stone-950 font-medium text-xs uppercase tracking-widest hover:bg-[#20ba5a] transition flex items-center justify-center gap-2 rounded-lg shadow-lg"
               >
                 <MessageSquare size={16} /> Send Payment Slip on WhatsApp
               </a>
@@ -213,10 +212,10 @@ export default function Register() {
             </div>
 
             {/* Stepper Tabs Bar */}
-            <div className="grid grid-cols-4 md:grid-cols-5 gap-3 border-b border-stone-800/80 pb-3 mb-8">
+            <div className="grid grid-cols-4 md:grid-cols-5 gap-2 sm:gap-3 border-b border-stone-800/80 pb-3 mb-8 overflow-x-auto">
               {steps.map((s, idx) => (
-                <div key={s.id} className="flex flex-col">
-                  <span className={`text-[10px] tracking-[0.16em] mb-2 font-medium ${idx === currentStepIndex ? "text-[#d4af37]" : "text-stone-600"}`}>
+                <div key={s.id} className="flex flex-col min-w-[70px]">
+                  <span className={`text-[9px] sm:text-[10px] tracking-[0.16em] mb-2 font-medium truncate ${idx === currentStepIndex ? "text-[#d4af37]" : "text-stone-600"}`}>
                     {s.label}
                   </span>
                   <div className={`h-[2px] w-full transition-all duration-300 ${idx <= currentStepIndex ? "bg-[#d4af37]" : "bg-stone-800"}`} />
@@ -241,7 +240,7 @@ export default function Register() {
                           value={formData.academyCategory}
                           onChange={handleChange}
                           required
-                          className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3 text-sm focus:outline-none focus:border-[#d4af37] transition-colors mb-4"
+                          className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border-[#d4af37] transition-colors mb-4"
                         >
                           {CATEGORIES.map((cat) => (
                             <option key={cat} value={cat} className="bg-[#121212]">{cat}</option>
@@ -258,7 +257,7 @@ export default function Register() {
                           value={formData.courseName}
                           onChange={handleChange}
                           required
-                          className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3 text-sm focus:outline-none focus:border-[#d4af37] transition-colors"
+                          className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border-[#d4af37] transition-colors"
                         >
                           {(COURSES_BY_CATEGORY[formData.academyCategory] || []).map((cName) => (
                             <option key={cName} value={cName} className="bg-[#121212]">{cName}</option>
@@ -274,18 +273,25 @@ export default function Register() {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
                           <label className="text-[11px] uppercase tracking-[0.15em] text-stone-400 block mb-2">First Name *</label>
-                          <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} required className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3 text-sm focus:outline-none focus:border-[#d4af37]" />
+                          <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} required className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border-[#d4af37]" />
                         </div>
                         <div>
                           <label className="text-[11px] uppercase tracking-[0.15em] text-stone-400 block mb-2">Last Name *</label>
-                          <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} required className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3 text-sm focus:outline-none focus:border-[#d4af37]" />
+                          <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} required className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border-[#d4af37]" />
                         </div>
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
                           <label className="text-[11px] uppercase tracking-[0.15em] text-stone-400 block mb-2">Date of Birth *</label>
-                          <input type="date" name="dob" value={formData.dob} onChange={handleChange} required className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3 text-sm focus:outline-none focus:border-[#d4af37] [color-scheme:dark]" />
+                          <input 
+                            type="date" 
+                            name="dob" 
+                            value={formData.dob} 
+                            onChange={handleChange} 
+                            required 
+                            className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border-[#d4af37] [color-scheme:dark] min-h-[48px]" 
+                          />
                           {age !== null && (
                             <span className={`text-[11px] block mt-1.5 ${requiresGuardian ? "text-[#d4af37]" : "text-stone-500"}`}>
                               Age: {age} {requiresGuardian && "· guardian details required"}
@@ -294,7 +300,7 @@ export default function Register() {
                         </div>
                         <div>
                           <label className="text-[11px] uppercase tracking-[0.15em] text-stone-400 block mb-2">Gender *</label>
-                          <select name="gender" value={formData.gender} onChange={handleChange} required className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3 text-sm focus:outline-none focus:border-[#d4af37]">
+                          <select name="gender" value={formData.gender} onChange={handleChange} required className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border-[#d4af37]">
                             <option value="" disabled>Select</option>
                             <option value="Female" className="bg-[#121212]">Female</option>
                             <option value="Male" className="bg-[#121212]">Male</option>
@@ -306,39 +312,39 @@ export default function Register() {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
                           <label className="text-[11px] uppercase tracking-[0.15em] text-stone-400 block mb-2">NIC / Passport</label>
-                          <input type="text" name="nic" value={formData.nic} onChange={handleChange} className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3 text-sm focus:outline-none focus:border-[#d4af37]" />
+                          <input type="text" name="nic" value={formData.nic} onChange={handleChange} className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border-[#d4af37]" />
                         </div>
                         <div>
                           <label className="text-[11px] uppercase tracking-[0.15em] text-stone-400 block mb-2">Email *</label>
-                          <input type="email" name="email" value={formData.email} onChange={handleChange} required className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3 text-sm focus:outline-none focus:border-[#d4af37]" />
+                          <input type="email" name="email" value={formData.email} onChange={handleChange} required className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border-[#d4af37]" />
                         </div>
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
                           <label className="text-[11px] uppercase tracking-[0.15em] text-stone-400 block mb-2">Mobile *</label>
-                          <input type="tel" name="mobile" value={formData.mobile} onChange={handleChange} required className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3 text-sm focus:outline-none focus:border-[#d4af37]" />
+                          <input type="tel" name="mobile" value={formData.mobile} onChange={handleChange} required className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border-[#d4af37]" />
                         </div>
                         <div>
                           <label className="text-[11px] uppercase tracking-[0.15em] text-stone-400 block mb-2">WhatsApp *</label>
-                          <input type="tel" name="whatsapp" value={formData.whatsapp} onChange={handleChange} required className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3 text-sm focus:outline-none focus:border-[#d4af37]" />
+                          <input type="tel" name="whatsapp" value={formData.whatsapp} onChange={handleChange} required className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border-[#d4af37]" />
                         </div>
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
                           <label className="text-[11px] uppercase tracking-[0.15em] text-stone-400 block mb-2">Address *</label>
-                          <input type="text" name="address" value={formData.address} onChange={handleChange} required className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3 text-sm focus:outline-none focus:border-[#d4af37]" />
+                          <input type="text" name="address" value={formData.address} onChange={handleChange} required className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border-[#d4af37]" />
                         </div>
                         <div>
                           <label className="text-[11px] uppercase tracking-[0.15em] text-stone-400 block mb-2">City *</label>
-                          <input type="text" name="city" value={formData.city} onChange={handleChange} required className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3 text-sm focus:outline-none focus:border-[#d4af37]" />
+                          <input type="text" name="city" value={formData.city} onChange={handleChange} required className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border-[#d4af37]" />
                         </div>
                       </div>
 
                       <div>
                         <label className="text-[11px] uppercase tracking-[0.15em] text-stone-400 block mb-2">School / Education</label>
-                        <input type="text" name="schoolEducation" value={formData.schoolEducation} onChange={handleChange} className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3 text-sm focus:outline-none focus:border-[#d4af37]" />
+                        <input type="text" name="schoolEducation" value={formData.schoolEducation} onChange={handleChange} className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border-[#d4af37]" />
                       </div>
                     </motion.div>
                   )}
@@ -349,11 +355,11 @@ export default function Register() {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
                           <label className="text-[11px] uppercase tracking-[0.15em] text-stone-400 block mb-2">Guardian Full Name *</label>
-                          <input type="text" name="guardianName" value={formData.guardianName} onChange={handleChange} required className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3 text-sm focus:outline-none focus:border-[#d4af37]" />
+                          <input type="text" name="guardianName" value={formData.guardianName} onChange={handleChange} required className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border-[#d4af37]" />
                         </div>
                         <div>
                           <label className="text-[11px] uppercase tracking-[0.15em] text-stone-400 block mb-2">Relationship *</label>
-                          <select name="guardianRelation" value={formData.guardianRelation} onChange={handleChange} required className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3 text-sm focus:outline-none focus:border-[#d4af37]">
+                          <select name="guardianRelation" value={formData.guardianRelation} onChange={handleChange} required className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border-[#d4af37]">
                             <option value="Father">Father</option>
                             <option value="Mother">Mother</option>
                             <option value="Legal Guardian">Legal Guardian</option>
@@ -365,17 +371,17 @@ export default function Register() {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
                           <label className="text-[11px] uppercase tracking-[0.15em] text-stone-400 block mb-2">Contact Number *</label>
-                          <input type="tel" name="guardianContact" value={formData.guardianContact} onChange={handleChange} required className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3 text-sm focus:outline-none focus:border-[#d4af37]" />
+                          <input type="tel" name="guardianContact" value={formData.guardianContact} onChange={handleChange} required className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border-[#d4af37]" />
                         </div>
                         <div>
                           <label className="text-[11px] uppercase tracking-[0.15em] text-stone-400 block mb-2">Email</label>
-                          <input type="email" name="guardianEmail" value={formData.guardianEmail} onChange={handleChange} className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3 text-sm focus:outline-none focus:border-[#d4af37]" />
+                          <input type="email" name="guardianEmail" value={formData.guardianEmail} onChange={handleChange} className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border-[#d4af37]" />
                         </div>
                       </div>
 
                       <div>
                         <label className="text-[11px] uppercase tracking-[0.15em] text-stone-400 block mb-2">Address (If different)</label>
-                        <input type="text" name="guardianAddress" value={formData.guardianAddress} onChange={handleChange} className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3 text-sm focus:outline-none focus:border-[#d4af37]" />
+                        <input type="text" name="guardianAddress" value={formData.guardianAddress} onChange={handleChange} className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border-[#d4af37]" />
                       </div>
                     </motion.div>
                   )}
@@ -385,15 +391,15 @@ export default function Register() {
                     <motion.div key="additional" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.25 }} className="space-y-5">
                       <div>
                         <label className="text-[11px] uppercase tracking-[0.15em] text-stone-400 block mb-2">Emergency Contact (Name & Number) *</label>
-                        <input type="text" name="emergencyContact" value={formData.emergencyContact} onChange={handleChange} required className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3 text-sm focus:outline-none focus:border-[#d4af37]" />
+                        <input type="text" name="emergencyContact" value={formData.emergencyContact} onChange={handleChange} required className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border-[#d4af37]" />
                       </div>
                       <div>
                         <label className="text-[11px] uppercase tracking-[0.15em] text-stone-400 block mb-2">Medical Conditions / Requirements</label>
-                        <textarea name="medicalConditions" value={formData.medicalConditions} onChange={handleChange} rows={3} className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3 text-sm focus:outline-none focus:border-[#d4af37] resize-none" />
+                        <textarea name="medicalConditions" value={formData.medicalConditions} onChange={handleChange} rows={3} className="w-full bg-[#121212] border border-stone-800 text-stone-200 p-4 text-sm rounded-lg focus:outline-none focus:border-[#d4af37] resize-none" />
                       </div>
                       <div>
                         <label className="text-[11px] uppercase tracking-[0.15em] text-stone-400 block mb-2">Previous Experience</label>
-                        <textarea name="previousExperience" value={formData.previousExperience} onChange={handleChange} rows={4} className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3 text-sm focus:outline-none focus:border-[#d4af37] resize-none" />
+                        <textarea name="previousExperience" value={formData.previousExperience} onChange={handleChange} rows={4} className="w-full bg-[#121212] border border-stone-800 text-stone-200 p-4 text-sm rounded-lg focus:outline-none focus:border-[#d4af37] resize-none" />
                       </div>
                     </motion.div>
                   )}
@@ -415,7 +421,7 @@ export default function Register() {
                       </div>
 
                       {error && (
-                        <div className="p-3 bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs flex items-center gap-2">
+                        <div className="p-3 bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs flex items-center gap-2 rounded-lg">
                           <AlertCircle size={14} /> {error}
                         </div>
                       )}
@@ -424,13 +430,13 @@ export default function Register() {
                 </AnimatePresence>
               </div>
 
-              {/* Form Action Buttons (Explicit type="button" prevents accidental page refresh) */}
-              <div className="flex items-center justify-between pt-6 mt-4 border-t border-stone-800/80">
+              {/* Form Action Buttons */}
+              <div className="flex items-center justify-between pt-6 mt-6 border-t border-stone-800/80">
                 <button
                   type="button"
                   onClick={handleBack}
                   disabled={currentStepIndex === 0}
-                  className={`px-6 py-2.5 text-xs tracking-wider transition-colors border ${
+                  className={`px-6 py-3 text-xs tracking-wider transition-colors rounded-lg border ${
                     currentStepIndex === 0 ? "border-transparent text-stone-700 cursor-not-allowed" : "border-stone-800 text-stone-300 hover:border-stone-600"
                   }`}
                 >
@@ -441,7 +447,7 @@ export default function Register() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="px-8 py-3 bg-[#d4af37] hover:bg-[#ebd083] text-stone-950 text-xs tracking-wider font-medium transition-colors disabled:opacity-50"
+                    className="px-8 py-3.5 bg-[#d4af37] hover:bg-[#ebd083] text-stone-950 text-xs tracking-wider font-medium rounded-lg transition-colors disabled:opacity-50 shadow-lg"
                   >
                     {isSubmitting ? "Submitting..." : "Submit Application"}
                   </button>
@@ -449,7 +455,7 @@ export default function Register() {
                   <button
                     type="button"
                     onClick={handleNext}
-                    className="px-8 py-3 bg-[#d4af37] hover:bg-[#ebd083] text-stone-950 text-xs tracking-wider font-medium transition-colors"
+                    className="px-8 py-3.5 bg-[#d4af37] hover:bg-[#ebd083] text-stone-950 text-xs tracking-wider font-medium rounded-lg transition-colors shadow-lg"
                   >
                     Continue
                   </button>
