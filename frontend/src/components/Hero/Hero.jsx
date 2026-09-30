@@ -5,7 +5,7 @@ import heroMobileImg from "../../assets/hero-new-mobile.jpg";
 
 export default function Hero() {
   return (
-    <section className="relative w-full h-screen flex flex-col justify-center bg-[#0a0a0a] overflow-hidden text-center">
+    <section className="relative w-full h-screen flex flex-col justify-center items-center bg-[#0a0a0a] overflow-hidden text-center">
       {/* Background Images & Overlays */}
       <div className="absolute inset-0 w-full h-full">
         <div className="absolute inset-0 bg-black/50 z-10"></div>
@@ -35,12 +35,12 @@ export default function Hero() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#d4af37]/10 rounded-full blur-[100px] pointer-events-none z-10" />
       </div>
 
-      <div className="relative z-20 max-w-[1400px] mx-auto px-6 w-full pt-12 flex flex-col items-center">
+      <div className="relative z-20 max-w-[1300px] mx-auto px-6 w-full flex flex-col items-center justify-center h-full pt-16 md:pt-10">
         <motion.div 
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="mb-3"
+          className="mb-2 md:mb-3"
         >
           <span className="text-[9px] md:text-[10px] uppercase tracking-[0.3em] text-stone-300 font-medium">
             Colombo Conservatory & Atelier
@@ -51,7 +51,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-3xl sm:text-5xl md:text-7xl lg:text-[6rem] font-serif text-stone-100 leading-[1.05] tracking-tight mb-4 sm:mb-6"
+          className="text-3xl sm:text-5xl md:text-6xl lg:text-[5.2rem] font-serif text-stone-100 leading-[1.05] tracking-tight mb-3 sm:mb-4"
         >
           Where voices rise <span className="text-[#d4af37] italic font-light">&</span><br />
           hands learn to see.
@@ -61,7 +61,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="text-stone-300 text-xs md:text-sm font-light leading-relaxed tracking-wide mb-6 sm:mb-10 max-w-xl mx-auto"
+          className="text-stone-300 text-xs md:text-sm font-light leading-relaxed tracking-wide mb-6 sm:mb-8 max-w-lg mx-auto"
         >
           Two academies, one standard of craft. Vocal training with Rising Voices and fine art with the Drawing Academy & Studio.
         </motion.p>
