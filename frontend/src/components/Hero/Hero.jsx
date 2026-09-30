@@ -8,9 +8,9 @@ export default function Hero() {
     <section className="relative w-full h-[85vh] lg:h-screen flex items-center justify-center bg-[#0a0a0a] overflow-hidden -mt-24 text-center">
       {/* Background Images & Overlays */}
       <div className="absolute inset-0 w-full h-full">
-        {/* Uniform dark overlay */}
+        {/* Uniform dark overlay allows both left and right sides of the image to show clearly */}
         <div className="absolute inset-0 bg-black/50 z-10"></div>
-        {/* Subtle vignette */}
+        {/* Subtle vignette to focus text readability in the center */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#0a0a0a_100%)] z-10 opacity-70"></div>
         
         {/* Desktop Background Image (Hidden on small screens) */}
@@ -23,14 +23,14 @@ export default function Hero() {
           className="hidden md:block w-full h-full object-cover object-center opacity-80"
         />
 
-        {/* Mobile Background Image (Visible only on small screens - shifted down using object positioning) */}
+        {/* Mobile Background Image (Visible only on small screens) - Adjusted position to push image lower */}
         <motion.img 
           initial={{ scale: 1.05 }}
           animate={{ scale: 1 }}
           transition={{ duration: 2, ease: "easeOut" }}
           src={heroMobileImg} 
           alt="Studio Background Mobile" 
-          className="block md:hidden w-full h-full object-cover object-[center_22%] opacity-80"
+          className="block md:hidden w-full h-full object-cover object-[center_30%] pt-12 opacity-80"
         />
 
         {/* Subtle gold ambient glow behind text */}
