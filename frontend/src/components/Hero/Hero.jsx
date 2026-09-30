@@ -23,21 +23,22 @@ export default function Hero() {
           className="hidden md:block w-full h-full object-cover object-center opacity-85"
         />
 
-        {/* Mobile Background Image (Positioned slightly lower using object-[center_30%]) */}
+        {/* Mobile Background Image (Positioned much lower using inline style) */}
         <motion.img 
           initial={{ scale: 1.05 }}
           animate={{ scale: 1 }}
           transition={{ duration: 2, ease: "easeOut" }}
           src={heroMobileImg} 
           alt="Studio Background Mobile" 
-          className="block md:hidden w-full h-full object-cover object-[center_35%] opacity-85"
+          style={{ objectPosition: 'center 75%' }}
+          className="block md:hidden w-full h-full object-cover opacity-85"
         />
 
         {/* Subtle gold ambient glow behind text */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#d4af37]/10 rounded-full blur-[100px] pointer-events-none z-10" />
       </div>
 
-      {/* Content Container with top padding to push content down from the header */}
+      {/* Content Container */}
       <div className="relative z-20 max-w-[1400px] mx-auto px-6 w-full pt-20 flex flex-col items-center">
         <motion.div 
           initial={{ opacity: 0, y: 15 }}
