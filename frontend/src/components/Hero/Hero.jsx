@@ -20,31 +20,29 @@ export default function Hero() {
           transition={{ duration: 2, ease: "easeOut" }}
           src={heroDesktopImg} 
           alt="Studio Background Desktop" 
-          className="hidden md:block w-full h-full object-cover object-center opacity-85"
+          className="hidden md:block w-full h-full object-cover object-center opacity-80"
         />
 
-        {/* Mobile Background Image (Positioned much lower using inline style) */}
+        {/* Mobile Background Image (Positioned lower using object-position) */}
         <motion.img 
           initial={{ scale: 1.05 }}
           animate={{ scale: 1 }}
           transition={{ duration: 2, ease: "easeOut" }}
           src={heroMobileImg} 
           alt="Studio Background Mobile" 
-          style={{ objectPosition: 'center 75%' }}
-          className="block md:hidden w-full h-full object-cover opacity-85"
+          className="block md:hidden w-full h-full object-cover object-[center_30%] opacity-80"
         />
 
         {/* Subtle gold ambient glow behind text */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#d4af37]/10 rounded-full blur-[100px] pointer-events-none z-10" />
       </div>
 
-      {/* Content Container */}
-      <div className="relative z-20 max-w-[1400px] mx-auto px-6 w-full pt-20 flex flex-col items-center">
+      <div className="relative z-20 max-w-[1400px] mx-auto px-6 w-full mt-16 flex flex-col items-center">
         <motion.div 
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="mb-3"
+          className="mb-4"
         >
           <span className="text-[9px] md:text-[10px] uppercase tracking-[0.3em] text-stone-300 font-medium">
             Colombo Conservatory & Atelier
@@ -55,7 +53,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-4xl sm:text-6xl md:text-7xl lg:text-[6rem] font-serif text-stone-100 leading-[1.05] tracking-tight mb-5"
+          className="text-4xl sm:text-6xl md:text-7xl lg:text-[6rem] font-serif text-stone-100 leading-[1.05] tracking-tight mb-6"
         >
           Where voices rise <span className="text-[#d4af37] italic font-light">&</span><br />
           hands learn to see.
@@ -78,13 +76,13 @@ export default function Hero() {
         >
           <Link
             to="/apply"
-            className="px-8 py-3.5 bg-[#d4af37] hover:bg-[#ebd083] text-stone-950 font-medium tracking-[0.15em] uppercase text-[10px] transition-colors flex items-center justify-center shadow-lg"
+            className="px-8 py-3.5 bg-[#d4af37] hover:bg-[#ebd083] text-stone-950 font-medium tracking-[0.15em] uppercase text-[10px] transition-colors flex items-center justify-center"
           >
             Apply Online — Free
           </Link>
           <Link
             to="/drawing-academy"
-            className="px-8 py-3.5 border border-stone-600 text-stone-200 font-medium tracking-[0.15em] uppercase text-[10px] hover:border-[#d4af37] hover:text-[#d4af37] bg-stone-950/40 backdrop-blur-sm transition-all flex items-center justify-center"
+            className="px-8 py-3.5 border border-stone-600 text-stone-200 font-medium tracking-[0.15em] uppercase text-[10px] hover:border-[#d4af37] hover:text-[#d4af37] bg-stone-950/30 backdrop-blur-sm transition-all flex items-center justify-center"
           >
             Explore courses
           </Link>
