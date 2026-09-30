@@ -34,7 +34,7 @@ const WHATSAPP_NUMBER = "94764316929";
 export default function Register() {
   const [formData, setFormData] = useState({
     academyCategory: "Drawing Academy & Studio",
-    courseName: "Advanced Painting",
+    courseName: "Beginner Drawing",
     firstName: "",
     lastName: "",
     dob: "",
@@ -204,7 +204,7 @@ export default function Register() {
             {/* Header Titles */}
             <div className="mb-6">
               <span className="text-[10px] uppercase tracking-[0.25em] text-[#d4af37] font-semibold block mb-1">
-                Apply Online · Free[cite: 5]
+                Apply Online · Free
               </span>
               <h1 className="text-3xl md:text-4xl font-serif text-stone-100 tracking-tight">
                 Application Form
@@ -290,7 +290,7 @@ export default function Register() {
                             value={formData.dob} 
                             onChange={handleChange} 
                             required 
-                            className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border-[#d4af37] [color-scheme:dark] min-h-[48px]" 
+                            className="w-full h-12 bg-[#121212] border border-stone-800 text-stone-200 px-4 text-sm rounded-lg focus:outline-none focus:border-[#d4af37] [color-scheme:dark] appearance-none" 
                           />
                           {age !== null && (
                             <span className={`text-[11px] block mt-1.5 ${requiresGuardian ? "text-[#d4af37]" : "text-stone-500"}`}>
@@ -300,7 +300,7 @@ export default function Register() {
                         </div>
                         <div>
                           <label className="text-[11px] uppercase tracking-[0.15em] text-stone-400 block mb-2">Gender *</label>
-                          <select name="gender" value={formData.gender} onChange={handleChange} required className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border-[#d4af37]">
+                          <select name="gender" value={formData.gender} onChange={handleChange} required className="w-full h-12 bg-[#121212] border border-stone-800 text-stone-200 px-4 text-sm rounded-lg focus:outline-none focus:border-[#d4af37]">
                             <option value="" disabled>Select</option>
                             <option value="Female" className="bg-[#121212]">Female</option>
                             <option value="Male" className="bg-[#121212]">Male</option>
@@ -316,18 +316,18 @@ export default function Register() {
                         </div>
                         <div>
                           <label className="text-[11px] uppercase tracking-[0.15em] text-stone-400 block mb-2">Email *</label>
-                          <input type="email" name="email" value={formData.email} onChange={handleChange} required className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border-[#d4af37]" />
+                          <input type="email" name="email" value={formData.email} onChange={handleChange} required placeholder="name@example.com" className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border-[#d4af37]" />
                         </div>
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
                           <label className="text-[11px] uppercase tracking-[0.15em] text-stone-400 block mb-2">Mobile *</label>
-                          <input type="tel" name="mobile" value={formData.mobile} onChange={handleChange} required className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border-[#d4af37]" />
+                          <input type="tel" name="mobile" value={formData.mobile} onChange={handleChange} required placeholder="+94 XX XXX XXXX" className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border-[#d4af37]" />
                         </div>
                         <div>
                           <label className="text-[11px] uppercase tracking-[0.15em] text-stone-400 block mb-2">WhatsApp *</label>
-                          <input type="tel" name="whatsapp" value={formData.whatsapp} onChange={handleChange} required className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border-[#d4af37]" />
+                          <input type="tel" name="whatsapp" value={formData.whatsapp} onChange={handleChange} required placeholder="+94 XX XXX XXXX" className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border-[#d4af37]" />
                         </div>
                       </div>
 
@@ -359,7 +359,7 @@ export default function Register() {
                         </div>
                         <div>
                           <label className="text-[11px] uppercase tracking-[0.15em] text-stone-400 block mb-2">Relationship *</label>
-                          <select name="guardianRelation" value={formData.guardianRelation} onChange={handleChange} required className="w-full bg-[#121212] border border-stone-800 text-stone-200 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border-[#d4af37]">
+                          <select name="guardianRelation" value={formData.guardianRelation} onChange={handleChange} required className="w-full h-12 bg-[#121212] border border-stone-800 text-stone-200 px-4 text-sm rounded-lg focus:outline-none focus:border-[#d4af37]">
                             <option value="Father">Father</option>
                             <option value="Mother">Mother</option>
                             <option value="Legal Guardian">Legal Guardian</option>
