@@ -23,26 +23,26 @@ export default function Hero() {
           className="hidden md:block w-full h-full object-cover object-center opacity-80"
         />
 
-        {/* Mobile Background Image (Visible only on small screens) - Adjusted position to push image lower */}
+        {/* Mobile Background Image (Visible only on small screens - nudged slightly downward using object-[center_35%]) */}
         <motion.img 
           initial={{ scale: 1.05 }}
           animate={{ scale: 1 }}
           transition={{ duration: 2, ease: "easeOut" }}
           src={heroMobileImg} 
           alt="Studio Background Mobile" 
-          className="block md:hidden w-full h-full object-cover object-[center_30%] pt-12 opacity-80"
+          className="block md:hidden w-full h-full object-cover object-[center_35%] opacity-80"
         />
 
         {/* Subtle gold ambient glow behind text */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#d4af37]/10 rounded-full blur-[120px] pointer-events-none z-10" />
       </div>
 
-      <div className="relative z-20 max-w-[1400px] mx-auto px-6 w-full mt-24 flex flex-col items-center">
+      <div className="relative z-20 max-w-[1400px] mx-auto px-6 w-full pt-28 md:pt-24 flex flex-col items-center">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="mb-6"
+          className="mb-4 md:mb-6"
         >
           <span className="text-[9px] md:text-[10px] uppercase tracking-[0.3em] text-stone-300 font-medium">
             Colombo Conservatory & Atelier
@@ -53,7 +53,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-5xl md:text-7xl lg:text-[6.5rem] font-serif text-stone-100 leading-[1.05] tracking-tight mb-8"
+          className="text-4xl sm:text-5xl md:text-7xl lg:text-[6.5rem] font-serif text-stone-100 leading-[1.05] tracking-tight mb-6 md:mb-8"
         >
           Where voices rise <span className="text-[#d4af37] italic font-light">&</span><br />
           hands learn to see.
@@ -63,7 +63,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="text-stone-300 text-xs md:text-sm font-light leading-relaxed tracking-wide mb-12 max-w-xl mx-auto"
+          className="text-stone-300 text-xs md:text-sm font-light leading-relaxed tracking-wide mb-8 md:mb-12 max-w-xl mx-auto"
         >
           Two academies, one standard of craft. Vocal training with Rising Voices and fine art with the Drawing Academy & Studio.
         </motion.p>
@@ -72,7 +72,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.8 }}
-          className="flex flex-col sm:flex-row gap-5 justify-center"
+          className="flex flex-col sm:flex-row gap-4 md:gap-5 justify-center"
         >
           <Link
             to="/apply"
