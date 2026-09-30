@@ -1,25 +1,38 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import heroImg from "../../assets/hero-new-desktop.jpg"; 
+import heroDesktopImg from "../../assets/hero-new-desktop.jpg"; 
+import heroMobileImg from "../../assets/hero-new-mobile.jpg"; 
 
 export default function Hero() {
   return (
     <section className="relative w-full h-[85vh] lg:h-screen flex items-center justify-center bg-[#0a0a0a] overflow-hidden -mt-24 text-center">
-      {/* Background Image & Overlay */}
+      {/* Background Images & Overlays */}
       <div className="absolute inset-0 w-full h-full">
         {/* Uniform dark overlay allows both left and right sides of the image to show clearly */}
         <div className="absolute inset-0 bg-black/50 z-10"></div>
         {/* Subtle vignette to focus text readability in the center */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#0a0a0a_100%)] z-10 opacity-70"></div>
         
+        {/* Desktop Background Image (Hidden on small screens) */}
         <motion.img 
           initial={{ scale: 1.05 }}
           animate={{ scale: 1 }}
           transition={{ duration: 2, ease: "easeOut" }}
-          src={heroImg} 
-          alt="Studio Background" 
-          className="w-full h-full object-cover object-center opacity-80"
+          src={heroDesktopImg} 
+          alt="Studio Background Desktop" 
+          className="hidden md:block w-full h-full object-cover object-center opacity-80"
         />
+
+        {/* Mobile Background Image (Visible only on small screens) */}
+        <motion.img 
+          initial={{ scale: 1.05 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 2, ease: "easeOut" }}
+          src={heroMobileImg} 
+          alt="Studio Background Mobile" 
+          className="block md:hidden w-full h-full object-cover object-center opacity-80"
+        />
+
         {/* Subtle gold ambient glow behind text */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#d4af37]/10 rounded-full blur-[120px] pointer-events-none z-10" />
       </div>
